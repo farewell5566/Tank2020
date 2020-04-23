@@ -7,15 +7,15 @@ public class Tank {
     private int x ,y ;
     private Dir dir ;
     private Group group;
+    private boolean stop;
 
     private int tankWidth,tankHeight;
     private int bulletWidth,bulletHeight;
 
-    private boolean BU,BD,BL,BR;
+    private final int SPEED = 15;
+    private boolean isLive = true;
+    private int oldX ,oldY;
 
-    private final int SPEED = 10;
-
-    private boolean stop = true;
 
     public Tank(int x,int y,Dir dir,Group group){
         this.x = x;
@@ -28,6 +28,14 @@ public class Tank {
         bulletHeight = ResourceMgr.bulletU.getHeight();
     }
 
+    public void setLive(boolean isLive){
+        this.isLive = isLive;
+    }
+
+    public boolean getLive() {
+        return isLive;
+    }
+
     public int getX(){
         return this.x;
     }
@@ -37,66 +45,27 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
+        if (!isLive) return;
+        oldX = this.x;
+        oldY = this.y;
         move();
-
+        boundIntersect();
+        randomDir();
         switch(dir){
             case U:
-                g.drawImage(ResourceMgr.goodTankU,x,y,null);
+                g.drawImage(ResourceMgr.badTankU,x,y,null);
                 break;
             case D:
-                g.drawImage(ResourceMgr.goodTankD,x,y,null);
+                g.drawImage(ResourceMgr.badTankD,x,y,null);
                 break;
             case L:
-                g.drawImage(ResourceMgr.goodTankL,x,y,null);
+                g.drawImage(ResourceMgr.badTankL,x,y,null);
                 break;
             case R:
-                g.drawImage(ResourceMgr.goodTankR,x,y,null);
+                g.drawImage(ResourceMgr.badTankR,x,y,null);
                 break;
         }
 
-    }
-
-    public void KeyPressed(KeyEvent e) {
-
-        int key = e.getKeyCode();
-        switch (key) {
-            case KeyEvent.VK_UP:
-                BU = true;
-                break;
-            case KeyEvent.VK_DOWN:
-                BD = true;
-                break;
-            case KeyEvent.VK_RIGHT:
-                BR = true;
-                break;
-            case KeyEvent.VK_LEFT:
-                BL = true;
-                break;
-        }
-        getDir();
-    }
-
-    public void keyReleased(KeyEvent e) {
-        int key =e.getKeyCode();
-        switch (key) {
-            case KeyEvent.VK_UP:
-                BU = false;
-                break;
-            case KeyEvent.VK_DOWN:
-                BD = false;
-                break;
-            case KeyEvent.VK_RIGHT:
-                BR = false;
-                break;
-            case KeyEvent.VK_LEFT:
-                BL = false;
-                break;
-            case KeyEvent.VK_CONTROL:
-                fire();
-                break;
-
-        }
-        getDir();
     }
 
     private void fire() {
@@ -114,19 +83,9 @@ public class Tank {
 
     }
 
-    private void getDir() {
-        stop = false;
-        if (BU&&!BD&&!BR&&!BL)
-            dir = Dir.U;
-        else if (!BU&&BD&&!BR&&!BL)
-            dir = Dir.D;
-        else if (!BU&&!BD&&BR&&!BL)
-            dir = Dir.R;
-        else if (!BU&&!BD&&!BR&&BL)
-            dir = Dir.L;
-        else{
-            stop = true;
-        }
+    private void randomDir() {
+        if (Math.random()*100 > 90)
+            dir = Dir.getRandom();
 
     }
 
@@ -147,4 +106,15 @@ public class Tank {
                 break;
         }
     }
+
+    private void boundIntersect() {
+        if (x<0||y<30||x+tankWidth > TankFrame.INSTRANCE.GAME_WIDTH || y + tankHeight>TankFrame.INSTRANCE.GAME_HEIGHT) {
+            x = oldX;
+            y= oldY;
+        }
+
+        //TankFrame.INSTRANCE.GAME_WIDTH
+
+    }
+
 }

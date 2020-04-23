@@ -11,9 +11,10 @@ public class TankFrame extends Frame {
 
     static final public TankFrame INSTRANCE = new TankFrame();
     static final int GAME_WIDTH = 1080,GAME_HEIGHT = 960;
-    Tank myTank;
+    Player myTank;
+    Tank enermy;
     List<Bullet> bullets = new ArrayList<>();
-    List<Bullet>bulletsTemp = new ArrayList<>();
+
     private int x = 100,y = 100;
     private Image offScreenImage = null;
 
@@ -21,7 +22,8 @@ public class TankFrame extends Frame {
         this.setLocation(100,100);
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
         this.addKeyListener(new MyTankListener());
-        myTank = new Tank(x,y,Dir.U,Group.GOOD);
+        myTank = new Player(x,y,Dir.U,Group.GOOD);
+        enermy = new Tank(200,200,Dir.D,Group.BAD);
         //Bullet bullet
     }
 
@@ -42,28 +44,30 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         myTank.paint(g);
-        bulletsTemp.clear();
-        for (int i = 0;i<bullets.size();++i)
-            bulletsTemp.add(bullets.get(i));
+        enermy.paint(g);
 
-        bullets.clear();
-        for (int i = 0;i<bulletsTemp.size();++i){
-            if(!bulletsTemp.get(i).isOut()){
-                bullets.add(bulletsTemp.get(i));
+        for (int i = 0;i<bullets.size();++i){
+            bullets.get(i).isOutBound();
+            if (bullets.get(i).collideWith(enermy)) {
+                bullets.get(i).setLive(false);
+                enermy.setLive(false);
             }
+
+            if(!bullets.get(i).getLive()){
+                bullets.remove(i);
+            }
+            else{
+                bullets.get(i).paint(g);
+            }
+
         }
 
-        for(int i = 0;i<bullets.size();++i){
-            bullets.get(i).paint(g);
-        }
-
+        //子弹数据标签
         Color colorOld = g.getColor();
         g.setColor(Color.white);
         String label = "子弹数量："+bullets.size();
         g.drawString(label,50,50);
         g.setColor(colorOld);
-
-
 
     }
 

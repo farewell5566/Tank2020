@@ -5,15 +5,23 @@ import java.awt.geom.Rectangle2D;
 
 public class Bullet {
 
-    private static int SPEED = 8;
+    private static int SPEED = 20;
     private int x,y;
     private Dir dir;
     private Group group;
     private static int width,height;
-
+    private Boolean isLive = true;
 
 
     public Bullet(){}
+
+    public void setLive(boolean isLive){
+        this.isLive = isLive;
+    }
+
+    public boolean getLive() {
+        return isLive;
+    }
 
     public Bullet(int x,int y,Dir dir,Group group){
         this.x = x;
@@ -43,6 +51,7 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
+        if (!isLive) return ;
         switch(dir){
             case U:
                 g.drawImage(ResourceMgr.bulletU,x,y,null);
@@ -60,20 +69,21 @@ public class Bullet {
         move();
     }
 
-    public boolean isOut() {
+    public  void isOutBound() {
         if (x<0||y<0||x>TankFrame.GAME_WIDTH ||y>TankFrame.GAME_HEIGHT)
-            return true;
+            this.isLive = false;
         else
-            return false;
+           this.isLive = true;
     }
 
-    public void collideWith(Tank tank){
+    public boolean collideWith(Tank tank){
+        if (!tank.getLive()||!this.isLive) return false;
         Rectangle bulletRect = new Rectangle();
         bulletRect.setBounds(this.x,this.y,this.width,this.height);
 
         Rectangle tankRect = new Rectangle();
         tankRect.setBounds(tank.getX(),tank.getY(),ResourceMgr.goodTankU.getWidth(),ResourceMgr.goodTankU.getHeight());
-        bulletRect.intersects(tankRect);
+        return bulletRect.intersects(tankRect);
 
     }
 
