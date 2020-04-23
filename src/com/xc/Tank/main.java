@@ -2,9 +2,9 @@ package com.xc.Tank;
 
 public class main {
     public static void main(String[] argus){
-        TankFrame myFrame = new TankFrame();
+        //TankFrame myFrame = new TankFrame();
 
-        myFrame.setVisible(true);
+        TankFrame.INSTRANCE.setVisible(true);
 
         while(true){
             try {
@@ -14,7 +14,7 @@ public class main {
                 ex.printStackTrace();
 
             }
-            myFrame.repaint();
+            TankFrame.INSTRANCE.repaint();
 
         }
     }
