@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Bullet {
 
-    private static int SPEED = 20;
+    private static int SPEED = 30;
     private int x,y;
     private Dir dir;
     private Group group;
@@ -78,12 +78,18 @@ public class Bullet {
 
     public boolean collideWith(Tank tank){
         if (!tank.getLive()||!this.isLive) return false;
+        if (this.group == tank.getGroup()) return false;
         Rectangle bulletRect = new Rectangle();
         bulletRect.setBounds(this.x,this.y,this.width,this.height);
 
         Rectangle tankRect = new Rectangle();
         tankRect.setBounds(tank.getX(),tank.getY(),ResourceMgr.goodTankU.getWidth(),ResourceMgr.goodTankU.getHeight());
-        return bulletRect.intersects(tankRect);
+        if (bulletRect.intersects(tankRect)){
+            TankFrame.INSTRANCE.addBoom(new Boom(tank.getX(),tank.getY(),true));
+            return true;
+        }
+        else
+            return false;
 
     }
 

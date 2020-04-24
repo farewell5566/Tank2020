@@ -44,6 +44,8 @@ public class Tank {
         return this.y;
     }
 
+    public Group getGroup(){return this.group;}
+
     public void paint(Graphics g) {
         if (!isLive) return;
         oldX = this.x;
@@ -51,6 +53,11 @@ public class Tank {
         move();
         boundIntersect();
         randomDir();
+
+        if (Math.random()*100>90)
+            fire();
+
+
         switch(dir){
             case U:
                 g.drawImage(ResourceMgr.badTankU,x,y,null);
@@ -112,8 +119,6 @@ public class Tank {
             x = oldX;
             y= oldY;
         }
-
-        //TankFrame.INSTRANCE.GAME_WIDTH
 
     }
 
