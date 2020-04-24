@@ -1,11 +1,10 @@
 package com.xc.Tank;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class Bullet {
 
-    private static int SPEED = 30;
+    private int speed ;
     private int x,y;
     private Dir dir;
     private Group group;
@@ -13,7 +12,9 @@ public class Bullet {
     private Boolean isLive = true;
 
 
-    public Bullet(){}
+    public Bullet(){
+
+    }
 
     public void setLive(boolean isLive){
         this.isLive = isLive;
@@ -30,21 +31,22 @@ public class Bullet {
         this.group = group;
         this.width = ResourceMgr.bulletU.getWidth();
         this.height = ResourceMgr.bulletU.getHeight();
+        speed =  Integer.parseInt((String)ConfigMgr.prop.get("BULLET_SPEED"));
     }
 
     public void move() {
         switch(dir){
             case U:
-                y -= SPEED;
+                y -= speed;
                 break;
             case D:
-                y += SPEED;
+                y += speed;
                 break;
             case R:
-                x += SPEED;
+                x += speed;
                 break;
             case L:
-                x -= SPEED;
+                x -= speed;
                 break;
         }
 
@@ -70,7 +72,7 @@ public class Bullet {
     }
 
     public  void isOutBound() {
-        if (x<0||y<0||x>TankFrame.GAME_WIDTH ||y>TankFrame.GAME_HEIGHT)
+        if (x<0||y<0||x>TankFrame.INSTRANCE.getGameWidth() ||y>TankFrame.INSTRANCE.getGameHeight())
             this.isLive = false;
         else
            this.isLive = true;

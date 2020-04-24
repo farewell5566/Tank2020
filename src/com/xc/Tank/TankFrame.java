@@ -3,17 +3,16 @@ package com.xc.Tank;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TankFrame extends Frame {
 
     static final public TankFrame INSTRANCE = new TankFrame();
-    static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
+    private int gameWidth , gameHeight;
     Player myTank;
 
-    static final int enemyNum = 10;
+    int enemyNum ;
     List<Tank> enemies = new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
     List<Boom> booms = new ArrayList<>();
@@ -21,27 +20,42 @@ public class TankFrame extends Frame {
     private Image offScreenImage = null;
 
     private TankFrame() {
+        initGame();
         this.setLocation(100, 100);
-        this.setSize(GAME_WIDTH, GAME_HEIGHT);
+        this.setSize(gameWidth, gameHeight);
         this.addKeyListener(new MyTankListener());
+
+
+    }
+
+    private void initGame(){
         myTank = new Player(x, y, Dir.U, Group.GOOD);
-        //enermy = new Tank(200,200,Dir.D,Group.BAD);
+
+        try{
+            enemyNum = Integer.parseInt((String)ConfigMgr.prop.get("initTankNum"));
+            gameWidth= Integer.parseInt((String)ConfigMgr.prop.get("GAME_WIDTH"));
+            gameHeight = Integer.parseInt((String)ConfigMgr.prop.get("GAME_HEIGHT"));
+        }catch(Exception ex) {
+            ex.getStackTrace();
+        }
+
+
         for (int i = 0; i < enemyNum; i++) {
             enemies.add(new Tank(20 + i * 80, 100, Dir.D, Group.BAD));
         }
 
-        //Bullet bullet
     }
+
 
     @Override
     public void update(Graphics g) {
         if (offScreenImage == null) {
-            offScreenImage = createImage(GAME_WIDTH, GAME_HEIGHT);
+            offScreenImage = createImage(gameWidth, gameHeight);
         }
         Graphics gOffScreen = offScreenImage.getGraphics();
         Color c = gOffScreen.getColor();
         gOffScreen.setColor(Color.black);
-        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        gOffScreen.fillRect(0, 0, gameWidth, gameHeight);
         gOffScreen.setColor(c);
         paint(gOffScreen);
         g.drawImage(offScreenImage, 0, 0, null);
@@ -118,4 +132,11 @@ public class TankFrame extends Frame {
             myTank.keyReleased(e);
         }
     }
+    public int getGameWidth(){
+        return gameWidth;
+    }
+    public int getGameHeight(){
+        return gameHeight;
+    }
+
 }

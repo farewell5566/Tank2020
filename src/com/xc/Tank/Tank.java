@@ -1,7 +1,9 @@
 package com.xc.Tank;
 
+import com.xc.Tank.Strategy.FireStrategy;
+import com.xc.Tank.Strategy.FireStrategyDefault;
+
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class Tank {
     private int x ,y ;
@@ -54,9 +56,10 @@ public class Tank {
         boundIntersect();
         randomDir();
 
-        if (Math.random()*100>90)
+        if (Math.random()*100>90){
             fire();
 
+        }
 
         switch(dir){
             case U:
@@ -86,8 +89,6 @@ public class Tank {
 
         TankFrame.INSTRANCE.addBullet(bullet);
 
-        bullet.move();
-
     }
 
     private void randomDir() {
@@ -115,11 +116,9 @@ public class Tank {
     }
 
     private void boundIntersect() {
-        if (x<0||y<30||x+tankWidth > TankFrame.INSTRANCE.GAME_WIDTH || y + tankHeight>TankFrame.INSTRANCE.GAME_HEIGHT) {
+        if (x<0||y<30||x+tankWidth > TankFrame.INSTRANCE.getGameWidth() || y + tankHeight>TankFrame.INSTRANCE.getGameHeight()) {
             x = oldX;
             y= oldY;
         }
-
     }
-
 }

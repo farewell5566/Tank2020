@@ -1,5 +1,7 @@
 package com.xc.Tank;
 
+import com.xc.Tank.Strategy.FireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -17,6 +19,7 @@ public class Player {
     private boolean isLive = true;
 
     private boolean stop = true;
+    private FireStrategy fireStra = null;
 
     public Player(int x, int y, Dir dir, Group group){
         this.x = x;
@@ -27,6 +30,7 @@ public class Player {
         tankHeight = ResourceMgr.goodTankU.getHeight();
         bulletWidth = ResourceMgr.bulletU.getWidth();
         bulletHeight = ResourceMgr.bulletU.getHeight();
+        this.initFireStrategy();
     }
 
     public void setLive(boolean isLive){
@@ -126,18 +130,23 @@ public class Player {
         getDir();
     }
 
+    private void initFireStrategy(){
+        String fireStr = (String)ConfigMgr.prop.get("FIRESTRATEGY");
+        ClassLoader loader = Player.class.getClassLoader();
+        try {
+            Class clazz =loader.loadClass("com.xc.Tank.Strategy."+ fireStr);
+            fireStra =(FireStrategy) clazz.getDeclaredConstructor().newInstance();
+
+        }catch (Exception ex){
+            ex.getStackTrace();
+        }
+    }
+
+
     private void fire() {
-        Bullet bullet;
-        if (dir == Dir.U || dir == Dir.D){
-            bullet = new Bullet(x + (tankWidth - bulletWidth)/2,y + (tankHeight - bulletHeight)/2,dir,group);
-        }
-        else {
-            bullet = new Bullet(x + (tankWidth - bulletWidth)/2,y + (tankHeight - bulletHeight)/2, dir, group);
-        }
 
-        TankFrame.INSTRANCE.addBullet(bullet);
-
-        bullet.move();
+        //FireStrategy fireStra = new FireStrategyLAndR();
+        fireStra.fire(x,y,dir);
 
     }
 

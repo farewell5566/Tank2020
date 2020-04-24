@@ -12,7 +12,6 @@ public class main {
             }
             catch(InterruptedException ex){
                 ex.printStackTrace();
-
             }
             TankFrame.INSTRANCE.repaint();
 
