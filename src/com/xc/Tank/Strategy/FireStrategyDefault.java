@@ -15,7 +15,7 @@ public class FireStrategyDefault implements FireStrategy{
             bullet = new Bullet(x + (ResourceMgr.goodTankU.getWidth() - ResourceMgr.bulletU.getWidth())/2,y + (ResourceMgr.goodTankU.getHeight() - ResourceMgr.bulletU.getHeight())/2, dir, Group.GOOD);
         }
 
-        TankFrame.INSTRANCE.addBullet(bullet);
+        TankFrame.INSTRANCE.getGm().addBullet(bullet);
 
     }
 }

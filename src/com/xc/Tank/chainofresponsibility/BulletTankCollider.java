@@ -15,7 +15,7 @@ public class BulletTankCollider implements Collider{
             if (tank.GetGroup() == bullet.getGroup()) return true;
 
             if (bullet.getRect().intersects(tank.getRect())){
-                TankFrame.INSTRANCE.addBoom(new Boom(tank.getX(),tank.getY(),true));
+                TankFrame.INSTRANCE.getGm().addBoom(new Boom(tank.getX(),tank.getY(),true));
                 bullet.setLive(false);
                 tank.setLive(false);
                 return false;

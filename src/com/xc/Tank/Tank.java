@@ -90,7 +90,7 @@ public class Tank extends AbstractGameObject{
             bullet = new Bullet(x + (tankWidth - bulletWidth)/2,y + (tankHeight - bulletHeight)/2, dir, group);
         }
 
-        TankFrame.INSTRANCE.addBullet(bullet);
+        TankFrame.INSTRANCE.getGm().addBullet(bullet);
 
     }
 

@@ -2,7 +2,9 @@ package com.xc.Tank.Strategy;
 
 import com.xc.Tank.Dir;
 
-public interface FireStrategy {
+import java.io.Serializable;
+
+public interface FireStrategy extends Serializable {
 
      void fire(int x,int y,Dir dir);
 
