@@ -5,7 +5,7 @@ import com.xc.Tank.Strategy.FireStrategy;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Player {
+public class Player extends AbstractGameObject{
     private int x ,y ;
     private Dir dir ;
     private Group group;
@@ -20,6 +20,7 @@ public class Player {
 
     private boolean stop = true;
     private FireStrategy fireStra = null;
+    private Rectangle rect ;
 
     public Player(int x, int y, Dir dir, Group group){
         this.x = x;
@@ -30,6 +31,7 @@ public class Player {
         tankHeight = ResourceMgr.goodTankU.getHeight();
         bulletWidth = ResourceMgr.bulletU.getWidth();
         bulletHeight = ResourceMgr.bulletU.getHeight();
+        rect = new Rectangle(x,y,tankWidth,tankHeight);
         this.initFireStrategy();
     }
 
@@ -52,6 +54,8 @@ public class Player {
     public void paint(Graphics g) {
         if (!isLive) return;
         move();
+        rect.x = x;
+        rect.y = y;
         if (this.group == Group.GOOD){
             switch(dir){
                 case U:
@@ -182,5 +186,10 @@ public class Player {
                 x -= SPEED;
                 break;
         }
+    }
+
+    @Override
+    public Rectangle getRect() {
+        return rect;
     }
 }

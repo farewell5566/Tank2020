@@ -4,4 +4,13 @@ GAME_WIDTH=1080
 GAME_HEIGHT=960
 BULLET_SPEED=50
 
+#墙信息
+WALLWIDTH=800
+WALLHEIGHT=60
+WALLX=150
+WALLY=200
+
 FIRESTRATEGY=FireStrategyAllDir
+
+
+AbstractObjectCollide=BulletTankCollider,BulletWallCollider,TankWallCollider,TankTankCollider

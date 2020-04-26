@@ -5,7 +5,7 @@ import com.xc.Tank.Strategy.FireStrategyDefault;
 
 import java.awt.*;
 
-public class Tank {
+public class Tank extends AbstractGameObject{
     private int x ,y ;
     private Dir dir ;
     private Group group;
@@ -18,6 +18,8 @@ public class Tank {
     private boolean isLive = true;
     private int oldX ,oldY;
 
+    private Rectangle rect ;
+
 
     public Tank(int x,int y,Dir dir,Group group){
         this.x = x;
@@ -28,6 +30,7 @@ public class Tank {
         tankHeight = ResourceMgr.goodTankU.getHeight();
         bulletWidth = ResourceMgr.bulletU.getWidth();
         bulletHeight = ResourceMgr.bulletU.getHeight();
+        rect = new Rectangle(x,y,tankWidth,tankHeight);
     }
 
     public void setLive(boolean isLive){
@@ -46,13 +49,13 @@ public class Tank {
         return this.y;
     }
 
-    public Group getGroup(){return this.group;}
 
     public void paint(Graphics g) {
         if (!isLive) return;
-        oldX = this.x;
-        oldY = this.y;
+
         move();
+        rect.x = x;
+        rect.y = y;
         boundIntersect();
         randomDir();
 
@@ -99,6 +102,8 @@ public class Tank {
 
     private void move() {
         if (stop) return;
+        oldX = this.x;
+        oldY = this.y;
         switch(dir){
             case U:
                 y -= SPEED;
@@ -120,5 +125,43 @@ public class Tank {
             x = oldX;
             y= oldY;
         }
+    }
+
+    public Rectangle getRect() {
+        return this.rect;
+    }
+
+    public void back() {
+        x = oldX;
+        y = oldY;
+    }
+
+    @Override
+    public String toString() {
+        return "Tank{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", group=" + group +
+                ", stop=" + stop +
+                ", tankWidth=" + tankWidth +
+                ", tankHeight=" + tankHeight +
+                ", bulletWidth=" + bulletWidth +
+                ", bulletHeight=" + bulletHeight +
+                ", SPEED=" + SPEED +
+                ", isLive=" + isLive +
+                ", oldX=" + oldX +
+                ", oldY=" + oldY +
+                ", rect=" + rect +
+                '}';
+    }
+
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Group GetGroup() {
+        return group;
     }
 }

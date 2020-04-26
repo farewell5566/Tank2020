@@ -2,7 +2,7 @@ package com.xc.Tank;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends AbstractGameObject {
 
     private int speed ;
     private int x,y;
@@ -10,9 +10,9 @@ public class Bullet {
     private Group group;
     private static int width,height;
     private Boolean isLive = true;
+    private Rectangle rect = null;
 
-
-    public Bullet(){
+    public Bullet (){
 
     }
 
@@ -32,6 +32,7 @@ public class Bullet {
         this.width = ResourceMgr.bulletU.getWidth();
         this.height = ResourceMgr.bulletU.getHeight();
         speed =  Integer.parseInt((String)ConfigMgr.prop.get("BULLET_SPEED"));
+        rect = new Rectangle(x,y,this.width,this.height);
     }
 
     public void move() {
@@ -69,6 +70,16 @@ public class Bullet {
                 break;
         }
         move();
+/*        Color old = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawRect(rect.x,rect.y,rect.width,rect.height);
+        g.setColor(old);*/
+
+        rect.x = this.x;
+        rect.y = this.y;
+
+
+        isOutBound();
     }
 
     public  void isOutBound() {
@@ -78,21 +89,20 @@ public class Bullet {
            this.isLive = true;
     }
 
-    public boolean collideWith(Tank tank){
-        if (!tank.getLive()||!this.isLive) return false;
-        if (this.group == tank.getGroup()) return false;
-        Rectangle bulletRect = new Rectangle();
-        bulletRect.setBounds(this.x,this.y,this.width,this.height);
+/*    public boolean collideWith(Tank tank){
 
-        Rectangle tankRect = new Rectangle();
-        tankRect.setBounds(tank.getX(),tank.getY(),ResourceMgr.goodTankU.getWidth(),ResourceMgr.goodTankU.getHeight());
-        if (bulletRect.intersects(tankRect)){
-            TankFrame.INSTRANCE.addBoom(new Boom(tank.getX(),tank.getY(),true));
-            return true;
-        }
-        else
-            return false;
 
+    }*/
+
+    public Rectangle getRect(){
+        return this.rect;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }
