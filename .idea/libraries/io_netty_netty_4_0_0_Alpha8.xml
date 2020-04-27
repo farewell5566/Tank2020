@@ -1,0 +1,8 @@
+<component name="libraryTable">
+  <library name="io.netty:netty:4.0.0.Alpha8" type="repository">
+    <properties maven-id="io.netty:netty:4.0.0.Alpha8" />
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
