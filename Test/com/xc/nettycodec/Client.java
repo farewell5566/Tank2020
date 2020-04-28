@@ -1,7 +1,8 @@
-package com.xc.NettyChart;
+package com.xc.nettycodec;
 
 
 
+import com.xc.NettyChart.ClientFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -9,15 +10,10 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
-
-import javax.swing.*;
-import java.io.IOException;
 
 
 public class Client {
     private SocketChannel socketChan = null;
-
 
     public void Init(){
         EventLoopGroup worker = new NioEventLoopGroup(1);
@@ -26,7 +22,6 @@ public class Client {
         b.channel(NioSocketChannel.class);
         b.handler(new MyHandler());
 
-       //Bootstrap bs = new Bootstrap();
         try {
             ChannelFuture future = b.connect("localhost",8888).sync();
             System.out.println("connected to server");
@@ -52,14 +47,16 @@ public class Client {
     }
 
     public void send(String text) {
-        ByteBuf buf = Unpooled.copiedBuffer(text.getBytes());
-        socketChan.pipeline().channel().writeAndFlush(buf);
+        //ByteBuf buf = Unpooled.copiedBuffer(text.getBytes());
+        //socketChan.pipeline().channel().writeAndFlush(buf);
+        socketChan.writeAndFlush(new TankMsg(4,6));
 
     }
 
     private  class MyHandler extends ChannelInitializer<SocketChannel>{
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
+            socketChannel.pipeline().addLast(new TankMsgEncoder());
             socketChannel.pipeline().addLast(new ClientHandler());
             socketChan = socketChannel;
 
@@ -89,8 +86,10 @@ public class Client {
             @Override
             public void channelActive(ChannelHandlerContext ctx) throws Exception {
                //netty中传输的数据都是bytebuf数据
-                ByteBuf buf = Unpooled.copiedBuffer(("client first connect").getBytes());
-                ctx.writeAndFlush(buf);
+                //ByteBuf buf = Unpooled.copiedBuffer(("client first connect").getBytes());
+                //ctx.writeAndFlush(buf);
+                //ctx.writeAndFlush(new TankMsg(4,6));
+
 
             }
 

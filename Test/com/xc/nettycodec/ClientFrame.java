@@ -1,9 +1,12 @@
-package com.xc.NettyChart;
+package com.xc.nettycodec;
 
-import org.junit.jupiter.api.Test;
+import com.xc.nettycodec.Client;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ClientFrame extends Frame {
     public static final ClientFrame INSTANCE = new ClientFrame();
@@ -13,7 +16,7 @@ public class ClientFrame extends Frame {
 
     private ClientFrame(){
         this.setSize(300,600);
-        this.setLocation(100,50);
+        this.setLocation(200,50);
         this.setTitle("QQDemo");
         //this.
         this.add(textArea,BorderLayout.CENTER);

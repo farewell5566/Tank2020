@@ -1,4 +1,4 @@
-package com.xc.NettyChart;
+package com.xc.nettycodec;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -8,9 +8,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
-import org.junit.jupiter.api.Test;
 
 public class Server {
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -29,7 +27,8 @@ public class Server {
             sbt.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel socketChannel) throws Exception {
-                    socketChannel.pipeline().addLast(new ServerHandler());//这里可以加很多机器人
+                        socketChannel.pipeline().addLast(new TankMsgDecoder());
+                        socketChannel.pipeline().addLast(new ServerHandler());//这里可以加很多机器人
                 }
             });
             ServerFrame.INSTANCE.serAreaUpdateMsg("服务启动");
@@ -51,9 +50,11 @@ public class Server {
     private  class ServerHandler extends ChannelInboundHandlerAdapter {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            TankMsg tankmsg = (TankMsg)msg ;
+            ServerFrame.INSTANCE.serAreaUpdateMsg(tankmsg.toString());
 
 
-            ByteBuf buf = (ByteBuf) msg;
+            /*ByteBuf buf = (ByteBuf) msg;
             byte[]bytes = new byte[buf.readableBytes()];
             buf.getBytes(buf.readerIndex(),bytes);
             String str = new String(bytes);
@@ -62,7 +63,7 @@ public class Server {
                 ctx.close();
             }else
                 clients.writeAndFlush(msg);
-            System.out.println(str);
+            System.out.println(str);*/
 
         }
 
@@ -85,7 +86,6 @@ public class Server {
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             clients.add(ctx.channel());
             System.out.println("连接上client");
-            ServerFrame.INSTANCE.serAreaUpdateMsg("连上client");
 
         }
     }
