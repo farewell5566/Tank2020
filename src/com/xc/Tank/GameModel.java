@@ -6,6 +6,8 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class GameModel implements Serializable {
     Player myTank;
@@ -21,7 +23,10 @@ public class GameModel implements Serializable {
     }
     private void InitGameModel(){
         //init colliders
-        myTank = new Player(x, y, Dir.U, Group.GOOD);
+
+        Random ran = new Random();
+
+        myTank = new Player(50+ran.nextInt(600), 30+ran.nextInt(600), Dir.values()[ran.nextInt(Dir.values().length)], Group.values()[ran.nextInt(Group.values().length)]);
         colliderChain  = new ColliderChain();
         //init gameObjectes
         gameObjetcs = new ArrayList<>();
@@ -35,7 +40,7 @@ public class GameModel implements Serializable {
         for (int i = 0; i < enemyNum; i++) {
             gameObjetcs.add(new Tank(20 + i * 80, 100, Dir.D, Group.BAD));
         }
-        gameObjetcs.add(new Wall());
+        //gameObjetcs.add(new Wall());
 
     }
 
@@ -106,15 +111,31 @@ public class GameModel implements Serializable {
 
     }
 
-    public void addBullet(Bullet bullet) {
+/*    public void addBullet(Bullet bullet) {
         gameObjetcs.add(bullet);
     }
 
     public void addBoom(Boom boom){
         gameObjetcs.add(boom);
+    }*/
+
+    public void add(AbstractGameObject objcet) {
+        gameObjetcs.add(objcet);
     }
 
     public Player getMyTank() {
         return myTank;
+    }
+
+    public Tank getTankByID(UUID id) {
+        for (AbstractGameObject model : gameObjetcs){
+            if (model instanceof Tank){
+                Tank t = (Tank)model;
+                if (t.getId().equals(id))
+                    return t;
+            }
+        }
+        return null;
+
     }
 }

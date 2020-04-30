@@ -4,6 +4,7 @@ import com.xc.Tank.Strategy.FireStrategy;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.UUID;
 
 public class Player extends AbstractGameObject{
     private int x ,y ;
@@ -21,12 +22,14 @@ public class Player extends AbstractGameObject{
     private boolean stop = true;
     private FireStrategy fireStra = null;
     private Rectangle rect ;
+    private UUID id;
 
     public Player(int x, int y, Dir dir, Group group){
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
+        this.id = UUID.randomUUID();
         tankWidth = ResourceMgr.goodTankU.getWidth();
         tankHeight = ResourceMgr.goodTankU.getHeight();
         bulletWidth = ResourceMgr.bulletU.getWidth();
@@ -51,9 +54,38 @@ public class Player extends AbstractGameObject{
         return this.y;
     }
 
+    public boolean getMoing(){
+        return !stop;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public Dir getDir(){
+        return this.dir;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     public void paint(Graphics g) {
         if (!isLive) return;
         move();
+
+        Color old = g.getColor();
+        g.setColor(Color.white);
+        g.drawString(this.id.toString(),x,y -30);
+
         rect.x = x;
         rect.y = y;
         if (this.group == Group.GOOD){
@@ -108,7 +140,7 @@ public class Player extends AbstractGameObject{
                 BL = true;
                 break;
         }
-        getDir();
+        calcDir();
     }
 
     public void keyReleased(KeyEvent e) {
@@ -131,7 +163,7 @@ public class Player extends AbstractGameObject{
                 break;
 
         }
-        getDir();
+        calcDir();
     }
 
     private void initFireStrategy(){
@@ -154,7 +186,7 @@ public class Player extends AbstractGameObject{
 
     }
 
-    private void getDir() {
+    private void calcDir() {
         stop = false;
         if (BU&&!BD&&!BR&&!BL)
             dir = Dir.U;

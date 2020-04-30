@@ -2,8 +2,10 @@ package com.xc.Tank;
 
 import com.xc.Tank.Strategy.FireStrategy;
 import com.xc.Tank.Strategy.FireStrategyDefault;
+import com.xc.Tank.net.JoinMsg;
 
 import java.awt.*;
+import java.util.UUID;
 
 public class Tank extends AbstractGameObject{
     private int x ,y ;
@@ -19,7 +21,7 @@ public class Tank extends AbstractGameObject{
     private int oldX ,oldY;
 
     private Rectangle rect ;
-
+    private UUID id = null;
 
     public Tank(int x,int y,Dir dir,Group group){
         this.x = x;
@@ -31,6 +33,19 @@ public class Tank extends AbstractGameObject{
         bulletWidth = ResourceMgr.bulletU.getWidth();
         bulletHeight = ResourceMgr.bulletU.getHeight();
         rect = new Rectangle(x,y,tankWidth,tankHeight);
+    }
+    public Tank(JoinMsg msg){
+        this.x= msg.getX();
+        this.y =msg.getY();
+        this.dir = msg.getDir();
+        this.group = msg.getGroup();
+        this.stop = !msg.isMoving();
+        this.id = msg.getId();
+        tankWidth = ResourceMgr.goodTankU.getWidth();
+        tankHeight = ResourceMgr.goodTankU.getHeight();
+        bulletWidth = ResourceMgr.bulletU.getWidth();
+        bulletHeight = ResourceMgr.bulletU.getHeight();
+        rect = new Rectangle(x,y,tankWidth,tankWidth);
     }
 
     public void setLive(boolean isLive){
@@ -49,6 +64,9 @@ public class Tank extends AbstractGameObject{
         return this.y;
     }
 
+    public UUID getId() {
+        return id;
+    }
 
     public void paint(Graphics g) {
         if (!isLive) return;
@@ -61,21 +79,20 @@ public class Tank extends AbstractGameObject{
 
         if (Math.random()*100>90){
             fire();
-
         }
 
         switch(dir){
             case U:
-                g.drawImage(ResourceMgr.badTankU,x,y,null);
+                g.drawImage(group == Group.BAD? ResourceMgr.badTankU:ResourceMgr.goodTankU,x,y,null);
                 break;
             case D:
-                g.drawImage(ResourceMgr.badTankD,x,y,null);
+                g.drawImage(group == Group.BAD?ResourceMgr.badTankD:ResourceMgr.goodTankD,x,y,null);
                 break;
             case L:
-                g.drawImage(ResourceMgr.badTankL,x,y,null);
+                g.drawImage(group == Group.BAD?ResourceMgr.badTankL:ResourceMgr.goodTankL,x,y,null);
                 break;
             case R:
-                g.drawImage(ResourceMgr.badTankR,x,y,null);
+                g.drawImage(group == Group.BAD?ResourceMgr.badTankR:ResourceMgr.goodTankR,x,y,null);
                 break;
         }
 
@@ -90,7 +107,7 @@ public class Tank extends AbstractGameObject{
             bullet = new Bullet(x + (tankWidth - bulletWidth)/2,y + (tankHeight - bulletHeight)/2, dir, group);
         }
 
-        TankFrame.INSTRANCE.getGm().addBullet(bullet);
+        TankFrame.INSTRANCE.getGm().add(bullet);
 
     }
 

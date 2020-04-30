@@ -1,5 +1,5 @@
 #用于配置项目使用信息
-initTankNum=10
+initTankNum=0
 GAME_WIDTH=1080
 GAME_HEIGHT=960
 BULLET_SPEED=50

@@ -8,7 +8,7 @@ public class FireStrategyAllDir implements FireStrategy{
         Bullet bullet ;
         for (Dir d:Dir.values()){
             bullet =new Bullet(x + (ResourceMgr.goodTankU.getWidth()  - ResourceMgr.bulletU.getWidth())/2,y + (ResourceMgr.goodTankU.getHeight()- ResourceMgr.bulletU.getHeight())/2,d,Group.GOOD);
-            TankFrame.INSTRANCE.getGm().addBullet(bullet);
+            TankFrame.INSTRANCE.getGm().add(bullet);
         }
     }
 

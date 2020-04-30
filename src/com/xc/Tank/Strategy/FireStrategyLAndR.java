@@ -9,8 +9,8 @@ public class FireStrategyLAndR implements FireStrategy{
 
         bulletL =new Bullet(x + (ResourceMgr.goodTankU.getWidth()  - ResourceMgr.bulletU.getWidth())/2,y + (ResourceMgr.goodTankU.getHeight()- ResourceMgr.bulletU.getHeight())/2,Dir.L,Group.GOOD);
         bulletR =new Bullet(x + (ResourceMgr.goodTankU.getWidth()  - ResourceMgr.bulletU.getWidth())/2,y + (ResourceMgr.goodTankU.getHeight()- ResourceMgr.bulletU.getHeight())/2,Dir.R,Group.GOOD);
-        TankFrame.INSTRANCE.getGm().addBullet(bulletL);
-        TankFrame.INSTRANCE.getGm().addBullet(bulletR);
+        TankFrame.INSTRANCE.getGm().add(bulletL);
+        TankFrame.INSTRANCE.getGm().add(bulletR);
     }
 
 }
